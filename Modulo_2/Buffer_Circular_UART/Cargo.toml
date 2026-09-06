@@ -1,0 +1,6 @@
+[package]
+name = "Buffer_Circular_UART"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

@@ -1,0 +1,23 @@
+# Rust build artifacts (proyectos anidados y raiz)
+**/target/
+target/
+
+# Archivos de respaldo y temporales de editores
+*.rs.bk
+*.swp
+*.swo
+*~
+
+# Configuraciones de IDEs
+.idea/
+.vscode/
+*.iml
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs y variables de entorno
+*.log
+.env
+.env.*
