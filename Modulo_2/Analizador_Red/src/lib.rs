@@ -26,29 +26,29 @@ impl<'a> VistaTramaEthernet<'a> {
         VistaTramaEthernet { raw_data: buffer }
     }
 
-    /// Devuelve un slice de 6 bytes que apunta a la MAC Destino.
+    /// Devuelve un slice de 6 bytes que apunta a la MAC Destino
     pub fn direccion_destino(&self) -> &'a [u8] {
-        &self.raw_data[8..14]
+        &self.raw_data[0..6]
     }
 
-    /// Devuelve un slice de 6 bytes que apunta a la MAC Origen.
+    /// Devuelve un slice de 6 bytes que apunta a la MAC Origen
     pub fn direccion_origen(&self) -> &'a [u8] {
-        &self.raw_data[14..20]
+        &self.raw_data[6..12]
     }
 
-    /// Devuelve el EtherType decodificado en formato Big-Endian.
+    /// Devuelve el EtherType decodificado en formato Big-Endian
     pub fn tipo_protocolo(&self) -> u16 {
-        let bytes: [u8; 2] = [self.raw_data[20], self.raw_data[21]];
+        let bytes: [u8; 2] = [self.raw_data[12], self.raw_data[13]];
         u16::from_be_bytes(bytes)
     }
 
-    /// Devuelve los datos utiles excluyendo cabecera y CRC.
+    /// Devuelve los datos utiles excluyendo cabecera y CRC
     pub fn payload(&self) -> &'a [u8] {
         let largo = self.raw_data.len();
-        &self.raw_data[22..largo - 4]
+        &self.raw_data[14..largo - 4]
     }
 
-    /// Devuelve los ultimos 4 bytes correspondientes al CRC.
+    /// Devuelve los ultimos 4 bytes correspondientes al CRC
     pub fn crc(&self) -> &'a [u8] {
         let largo = self.raw_data.len();
         &self.raw_data[largo - 4..largo]
@@ -76,13 +76,12 @@ pub fn formatear_mac(mac: &[u8]) -> String {
 mod tests {
     use super::*;
 
-    const BUFFER_TEST: [u8; 32] = [
-        0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAB,
+    const BUFFER_TEST: [u8; 24] = [
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // Destino
         0x00, 0x15, 0x5D, 0x01, 0x1A, 0x02, // Origen
-        0x08, 0x00,                         // IPv4
+        0x08, 0x00, // IPv4
         0x48, 0x6F, 0x6C, 0x61, 0x21, 0x21, // Payload
-        0xDE, 0xAD, 0xBE, 0xEF,             // CRC
+        0xDE, 0xAD, 0xBE, 0xEF, // CRC
     ];
 
     #[test]
@@ -94,7 +93,10 @@ mod tests {
     #[test]
     fn test_direcciones_mac() {
         let vista = VistaTramaEthernet::registrar(&BUFFER_TEST);
-        assert_eq!(formatear_mac(vista.direccion_destino()), "FF:FF:FF:FF:FF:FF");
+        assert_eq!(
+            formatear_mac(vista.direccion_destino()),
+            "FF:FF:FF:FF:FF:FF"
+        );
         assert_eq!(formatear_mac(vista.direccion_origen()), "00:15:5D:01:1A:02");
     }
 

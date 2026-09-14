@@ -1,15 +1,13 @@
-use analizador_red::{VistaTramaEthernet, formatear_mac};
+use analizador_red::{formatear_mac, VistaTramaEthernet};
 
 fn main() {
-    // Buffer binario real que simula la llegada de una trama por la tarjeta de red
-    let buffer_tarjeta_red: [u8; 32] = [
-        0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, // Preambulo
-        0xAB,                                     // SFD
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,       // MAC Destino (Broadcast)
-        0x00, 0x15, 0x5D, 0x01, 0x1A, 0x02,       // MAC Origen
-        0x08, 0x00,                               // Tipo IPv4
-        0x48, 0x6F, 0x6C, 0x61, 0x21, 0x21,       // Datos (Hola!!)
-        0xDE, 0xAD, 0xBE, 0xEF,                   // CRC
+    // Buffer binario que simula una trama Ethernet II tal como la entrega el SO
+    let buffer_tarjeta_red: [u8; 24] = [
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // MAC Destino (Broadcast)
+        0x00, 0x15, 0x5D, 0x01, 0x1A, 0x02, // MAC Origen
+        0x08, 0x00, // Tipo IPv4
+        0x48, 0x6F, 0x6C, 0x61, 0x21, 0x21, // Datos (Hola!!)
+        0xDE, 0xAD, 0xBE, 0xEF, // CRC
     ];
 
     println!("=== INICIANDO ANALIZADOR DE RED ZERO-COPY ===\n");
@@ -32,5 +30,8 @@ fn main() {
 
     // CRC de seguridad
     let crc = vista.crc();
-    println!("CRC: 0x{:02X}{:02X}{:02X}{:02X}", crc[0], crc[1], crc[2], crc[3]);
+    println!(
+        "CRC: 0x{:02X}{:02X}{:02X}{:02X}",
+        crc[0], crc[1], crc[2], crc[3]
+    );
 }

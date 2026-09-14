@@ -12,12 +12,10 @@ El parser procesa el buffer binario mapeando los siguientes rangos de índices f
 
 | Campo | Tamaño | Rango de Índices | Descripción |
 | :--- | :---: | :---: | :--- |
-| **Preámbulo** | 7 bytes | `0..7` | Sincronización del reloj del receptor (típicamente `0xAA`). |
-| **SFD (Comienzo de trama)** | 1 byte | `7` | Indica el inicio inmediato de la trama (`0xAB`). |
-| **Dirección Destino (MAC)** | 6 bytes | `8..14` | Dirección MAC del dispositivo receptor. |
-| **Dirección Origen (MAC)** | 6 bytes | `14..20` | Dirección MAC del dispositivo transmisor. |
-| **Tipo (EtherType)** | 2 bytes | `20..22` | Protocolo de red encapsulado (ej: `0x0800` para IPv4). |
-| **Datos (Payload)** | Variable | `22..(N - 4)` | Carga útil transportada por la trama de red. |
+| **Dirección Destino (MAC)** | 6 bytes | `0..6` | Dirección MAC del dispositivo receptor. |
+| **Dirección Origen (MAC)** | 6 bytes | `6..12` | Dirección MAC del dispositivo transmisor. |
+| **Tipo (EtherType)** | 2 bytes | `12..14` | Protocolo de red encapsulado (ej: `0x0800` para IPv4). |
+| **Datos (Payload)** | Variable | `14..(N - 4)` | Carga útil transportada por la trama de red. |
 | **CRC** | 4 bytes | `(N - 4)..N` | Código de redundancia cíclica para validación de errores. |
 
 ## Glosario de Conceptos Técnicos
